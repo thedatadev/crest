@@ -1,0 +1,10 @@
+package models
+
+var regularResource := "${regular}";
+var capitalResource := "${capital}";
+
+// Resource model
+type Resources struct {
+	
+    
+}

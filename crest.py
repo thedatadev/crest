@@ -4,7 +4,7 @@ import sys
 import os
 
 FRONTEND_CHOICES = ['react']
-BACKEND_CHOICES  = ['flask', 'node']
+BACKEND_CHOICES  = ['go']
 
 frontend_prompt = f"Choose a frontend setup from: ({', '.join(FRONTEND_CHOICES)}): "
 backend_prompt  = f"Choose a backend setup from: ({', '.join(BACKEND_CHOICES)}): "
@@ -37,4 +37,4 @@ if __name__ == "__main__":
     items_to_interpolate = { 'resources': resources, 'components': components }
 
     app_builder.build('client', frontend_choice, items_to_interpolate)
-    # app_builder.build('server', backend_choice, items_to_interpolate)
+    app_builder.build('server', backend_choice, items_to_interpolate)
