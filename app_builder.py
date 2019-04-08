@@ -90,6 +90,8 @@ def handle_file(entry, current_path, items_to_interpolate):
         file_is_based_on_parent_folder(entry, current_path, file_name)
     elif item_suffix == 'resources':
         file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
+    elif item_suffix == 'components':
+        file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
     else:
         exit(f"The item suffix '{item_suffix}' is not supported. Crest terminated.")
     # Finally, discard the template file from the repo

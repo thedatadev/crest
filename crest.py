@@ -3,7 +3,7 @@ import app_builder
 import sys
 import os
 
-FRONTEND_CHOICES = ['react']
+FRONTEND_CHOICES = ['react', 'vue']
 BACKEND_CHOICES  = ['go']
 
 frontend_prompt = f"Choose a frontend setup from: ({', '.join(FRONTEND_CHOICES)}): "
