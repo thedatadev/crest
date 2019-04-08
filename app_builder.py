@@ -4,7 +4,6 @@ from string import Template
 from shutil import copytree, rmtree
 from sys import exit
                                          
-
 def build(api_type, api_choice, items_to_interpolate):
     # Verify if user would like to overwrite client or server directories if they alrady exist
     if exists(api_type) and input(f"The directory '{api_type}' already exists. Enter y to overwrite: ") == 'y':
@@ -17,7 +16,6 @@ def build(api_type, api_choice, items_to_interpolate):
     copytree(src=src, dst=dst)
     # Run the templating on the retrieved templates
     perform_templating(items_to_interpolate, current_path=dst)
-
 
 def perform_templating(items_to_interpolate, current_path):
 

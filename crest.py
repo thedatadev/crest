@@ -4,7 +4,7 @@ import sys
 import os
 
 FRONTEND_CHOICES = ['react', 'vue']
-BACKEND_CHOICES  = ['go']
+BACKEND_CHOICES  = ['go', 'flask']
 
 frontend_prompt = f"Choose a frontend setup from: ({', '.join(FRONTEND_CHOICES)}): "
 backend_prompt  = f"Choose a backend setup from: ({', '.join(BACKEND_CHOICES)}): "
