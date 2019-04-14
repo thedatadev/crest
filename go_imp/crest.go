@@ -1,9 +1,13 @@
+/*
+ * Crest - create a RESTful project skeleton
+ * Written by Edrian Gomez 2019
+ */
+
 package main
 
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -78,6 +82,87 @@ func promptMulti(question string) []string {
 	return strings.Split(answer, " ")
 }
 
+func nonCrestHandler() {
+
+}
+
+func customContentHandler(newFilepath string, projectName string, resources []string, components []string) {
+	fmt.Println("Injecting project data into the custom content file")
+}
+
+func parentFilenameHandler() {
+	fmt.Println("Generating file/folder based on parent")
+	// Extract the parent dir name
+
+	// Create a new file path based on parent dir name
+
+	// Execute template
+}
+
+func resourceFilenameHandler() {
+	fmt.Println("Generating file/folder based on resource")
+
+	// If file
+
+	// For each resource
+
+	// Create a new filepath
+
+	// Read the original template
+
+	// Inject resources into template
+
+	// If dir
+
+	// duplicate a new dir for each resource
+}
+
+func componentFilenameHandler() {
+	fmt.Println("Generating file/folder based on component")
+
+	// If file
+
+	// For each component
+
+	// Create a new filepath
+
+	// Read the original template
+
+	// Inject component info into template
+
+	// If dir
+
+	// duplicate a new dir for each component
+}
+
+func customeNameHandler(newFilepath string, projectName string, resources []string, components []string) {
+	switch filepath.Ext(newFilepath) {
+	case ".parent":
+		parentFilenameHandler()
+	case ".resources":
+		resourceFilenameHandler()
+	case ".components":
+		componentFilenameHandler()
+	default:
+		fmt.Printf("Warning: Crest (custom filename) extension %s is not recognised")
+	}
+}
+
+func crestHandler(newFilepath string, projectName string, resources []string, components []string) {
+
+	switch filepath.Ext(newFilepath) {
+	case ".customContent":
+		newFilepath = strings.TrimSuffix(newFilepath, ".customContent")
+		customContentHandler(newFilepath, projectName, resources, components)
+	case ".customeName":
+		newFilepath = strings.TrimSuffix(newFilepath, ".customeName")
+		customeNameHandler(newFilepath, projectName, resources, components)
+	default:
+		fmt.Printf("Warning: Crest extension %s is not recognised")
+	}
+
+}
+
 func walkFnWrapper(projectName string, sourceBase string, resources []string, components []string) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 
@@ -91,23 +176,31 @@ func walkFnWrapper(projectName string, sourceBase string, resources []string, co
 		targetSuffix := strings.TrimPrefix(path, sourceBase)
 		newFilepath := filepath.Join(targetBase, targetSuffix)
 
-		if info.IsDir() {
-			// fmt.Printf("mkdir %s\n", newFilepath)
-			mkdirErr := os.Mkdir(newFilepath, os.ModePerm)
-			if mkdirErr != nil {
-				panic(mkdirErr)
-			}
+		if filepath.Ext(path) == ".crest" {
+			fmt.Println(path)
+			newFilepath = strings.TrimSuffix(newFilepath, ".crest")
+			crestHandler(newFilepath, projectName, resources, components)
 		} else {
-			// fmt.Printf("write file %s\n", newFilepath)
-			data, readFileErr := ioutil.ReadFile(path)
-			if readFileErr != nil {
-				panic(readFileErr)
-			}
-			writeFileErr := ioutil.WriteFile(newFilepath, data, os.ModePerm)
-			if writeFileErr != nil {
-				panic(writeFileErr)
-			}
+			nonCrestHandler()
 		}
+
+		// if info.IsDir() {
+		// 	// fmt.Printf("mkdir %s\n", newFilepath)
+		// 	mkdirErr := os.Mkdir(newFilepath, os.ModePerm)
+		// 	if mkdirErr != nil {
+		// 		panic(mkdirErr)
+		// 	}
+		// } else {
+		// 	// fmt.Printf("write file %s\n", newFilepath)
+		// 	data, readFileErr := ioutil.ReadFile(path)
+		// 	if readFileErr != nil {
+		// 		panic(readFileErr)
+		// 	}
+		// 	writeFileErr := ioutil.WriteFile(newFilepath, data, os.ModePerm)
+		// 	if writeFileErr != nil {
+		// 		panic(writeFileErr)
+		// 	}
+		// }
 
 		return nil
 	}
