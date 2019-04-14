@@ -39,7 +39,6 @@ func getAnswer(choices []string) string {
 		return answer
 	}
 	for _, choice := range choices {
-		fmt.Printf("Comapring %s with %s.\n", answer, choice)
 		if answer == choice {
 			// To remove the trailing line break \n
 			return answer
@@ -79,37 +78,27 @@ func promptMulti(question string) []string {
 	return strings.Split(answer, " ")
 }
 
-func buildProject(name string, frontend string, backend string, resources []string, components []string) {
-	fmt.Printf("%v %v %v %v %v\n", name, frontend, backend, resources, components)
-}
-
-func walkFnWrapper(name string) filepath.WalkFunc {
+func walkFnWrapper(projectName string, sourceBase string, resources []string, components []string) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
-
-		// The directory where all the template files and folders are from
-		sourceBase := "/Users/developer/dev/code/projects/crest/go_imp/src"
 
 		cwd, getcwdError := os.Getwd()
 		if getcwdError != nil {
 			panic(getcwdError)
 		}
 
-		// The directory where all the template files and folders are going
-		targetBase := filepath.Join(cwd, name)
-
-		targetSuffix := strings.TrimPrefix(path, sourceBase)
-
 		// The path in the target directory for the new file or folder
+		targetBase := filepath.Join(cwd, projectName)
+		targetSuffix := strings.TrimPrefix(path, sourceBase)
 		newFilepath := filepath.Join(targetBase, targetSuffix)
 
 		if info.IsDir() {
-			fmt.Printf("mkdir %s\n", newFilepath)
+			// fmt.Printf("mkdir %s\n", newFilepath)
 			mkdirErr := os.Mkdir(newFilepath, os.ModePerm)
 			if mkdirErr != nil {
 				panic(mkdirErr)
 			}
 		} else {
-			fmt.Printf("write file %s\n", newFilepath)
+			// fmt.Printf("write file %s\n", newFilepath)
 			data, readFileErr := ioutil.ReadFile(path)
 			if readFileErr != nil {
 				panic(readFileErr)
@@ -124,31 +113,46 @@ func walkFnWrapper(name string) filepath.WalkFunc {
 	}
 }
 
-func walkDir() {
+func buildProject(name string, frontendChoice string, backendChoice string, resources []string, components []string) {
 
-	// TODO: change this to be dynamic; build an executable and use os.executable's path
-	root := "/Users/developer/dev/code/projects/crest/go_imp/src"
-
-	walkErr := filepath.Walk(root, walkFnWrapper("myApp"))
-
-	if walkErr != nil {
-		panic(walkErr)
+	exePath, exeErr := os.Executable()
+	if exeErr != nil {
+		panic(exeErr)
 	}
+	root := filepath.Join(filepath.Dir(filepath.Dir(exePath)), "templates")
+
+	// Build the frontend skeleton
+	frontendPath := filepath.Join(root, "client", frontendChoice)
+	frontendWalkErr := filepath.Walk(frontendPath, walkFnWrapper(name, frontendPath, resources, components))
+	if frontendWalkErr != nil {
+		panic(frontendWalkErr)
+	}
+
+	// // Build the backend skeleton
+	// backendPath := filepath.Join(root, "backend", backendChoice)
+	// backendWalkErr := filepath.Walk(backendPath, walkFnWrapper(name, backendPath, resources, components))
+	// if backendWalkErr != nil {
+	// 	panic(backendWalkErr)
+	// }
 
 }
 
 func main() {
 
 	// fmt.Println("==== Crest - Create a RESTful project base ====")
-	//// TODO: validate project name i.e. has legal characters
+	// // TODO: validate project name i.e. has legal characters
 	// name := promptSingle("What is your project name? ")
-	// frontend := promptSingle("What is your project frontend? ", "react", "vue", "reframe", "angular")
-	// backend := promptSingle("What is your project backend? ", "go", "flask", "node", "clojure")
+	// frontend := promptSingle("What is your project frontend? ", "react", "vue", "reframe")
+	// backend := promptSingle("What is your project backend? ", "go", "flask", "clojure")
 	// resources := promptMulti("What are your project resources? ")
 	// components := promptMulti("What are your project components? ")
 
-	// buildProject(name, frontend, backend, resources, components)
+	name := "todomvc"
+	frontend := "react"
+	backend := "go"
+	resources := []string{"todo", "user"}
+	components := []string{"header", "form", "button"}
 
-	walkDir()
+	buildProject(name, frontend, backend, resources, components)
 
 }
