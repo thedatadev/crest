@@ -1,0 +1,2 @@
+const regularComponent = "${regular}";
+const capitalComponent = "${capital}";
