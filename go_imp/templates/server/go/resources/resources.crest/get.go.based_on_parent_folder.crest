@@ -1,2 +1,0 @@
-var regularResource := "${regular}";
-var capitalResource := "${capital}";
