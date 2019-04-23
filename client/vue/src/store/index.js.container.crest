@@ -1,0 +1,16 @@
+import Vue from "vue";
+import Vuex from "vuex";
+
+{% for resource in resources %}
+import {{resource}} from './{{resource}}';
+{% endfor %}
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+    modules: {
+        {% for resource in resources %}
+            {{resource}},
+        {% endfor %}
+    }
+});

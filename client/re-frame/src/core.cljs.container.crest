@@ -3,10 +3,14 @@
             [re-frame.core :refer [dispatch-sync]]
             [devtools.core :as devtools]
 
-            [template.db] ; NOTE :refer :all triggers an exception since it's not allowed in ClojureScript
-            [template.events]
-            [template.views :refer [app]]
-            [template.subs]))
+            {% for resource in resources %}
+            [{{resource}}.db]
+            [{{resource}}.events]
+            [{{resource}}.views :refer [app]]
+            [{{resource}}.subs]
+            {% endfor %}
+  )
+)
 
 (devtools/install!)
 
