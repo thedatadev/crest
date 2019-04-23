@@ -1,0 +1,12 @@
+from flask import Flask
+
+
+{% for resource in resources %}
+from modules.{{resource}}.routes import mod as {{resource}}_mod
+{% endfor %}
+
+app = Flask(__name__)
+
+{% for resource in resources %}
+app.register_blueprint({{resource}}_mod)
+{% endfor %}

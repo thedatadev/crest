@@ -88,11 +88,13 @@ def handle_file(entry, current_path, items_to_interpolate):
     if item_suffix == 'based_on_parent_folder':
         file_is_based_on_parent_folder(entry, current_path, file_name)
     elif item_suffix == 'resources':
-        file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
+        file_is_based_on_item(entry, items_to_interpolate, item_suffix, file_name, current_path)
     elif item_suffix == 'components':
-        file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
+        file_is_based_on_item(entry, items_to_interpolate, item_suffix, file_name, current_path)
     elif item_suffix == 'container':
-        file_contains_resources(entry, items_to_interpolate, file_name, current_path)
+        file_is_item_container(entry, items_to_interpolate, file_name, current_path)
+    elif item_suffix == 'inherit':
+        file_inherits_item(entry, items_to_interpolate, file_name, current_path)
     else:
         exit(f"The item suffix '{item_suffix}' is not supported. Crest terminated.")
     # Finally, discard the template file from the repo
@@ -109,7 +111,7 @@ def file_is_based_on_parent_folder(entry, current_path, file_name):
                             new_file_name=abspath(join(current_path, file_name)),
                             item_to_interpolate=basename(current_path)) # just dir name
 
-def file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path):
+def file_is_based_on_item(entry, items_to_interpolate, item_suffix, file_name, current_path):
     # If a file is marked with the extension "resources",
     # it results in the file being named after a given resource in items_to_interpolate["resources"]
     # Example:
@@ -122,7 +124,7 @@ def file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_nam
                                 new_file_name=abspath(join(current_path, item_file_name)),
                                 item_to_interpolate=item)
 
-def file_contains_resources(entry, items_to_interpolate, file_name, current_path):
+def file_is_item_container(entry, items_to_interpolate, file_name, current_path):
     # If a file is marked with the extension "container",
     # it contains information about resources or components etc. but its name is unaffected
     # Example:
@@ -140,6 +142,13 @@ def file_contains_resources(entry, items_to_interpolate, file_name, current_path
             complete_template = Template(incomplete_template)
             new_file.write(complete_template.render(resources=items_to_interpolate['resources'],
                                                     components=items_to_interpolate['components']))
+
+def file_inherits_item(entry, items_to_interpolate, file_name, current_path):
+    # Same as based_on_parent_folder except that it only inherits 
+    # the item, not the name from parent folder
+    duplicate_template_file(template_file=entry.path, # entry.path ends with dir name
+                            new_file_name=abspath(join(current_path, file_name)),
+                            item_to_interpolate=basename(current_path)) # just dir name
 
 def duplicate_template_folder(current_path, template_folder_path, folder_name, items_to_interpolate, item_suffix):
     # Generates a new folder based on the template folder and the item suffix of the template folder

@@ -26,14 +26,21 @@ if __name__ == "__main__":
     
     print("Crest - a full-stack RESTful project initialiser")
 
-    app_name = input("App name: ")
+    # app_name = input("App name: ")
 
-    frontend_choice = prompt_for_single_choice(FRONTEND_CHOICES, frontend_prompt)
-    backend_choice = prompt_for_single_choice(BACKEND_CHOICES, backend_prompt)
+    # frontend_choice = prompt_for_single_choice(FRONTEND_CHOICES, frontend_prompt)
+    # backend_choice = prompt_for_single_choice(BACKEND_CHOICES, backend_prompt)
 
-    resources = prompt_for_multiple_choices("List the REST resources for this project: ")
-    components = prompt_for_multiple_choices("List the frontend components for this project: ")
+    # resources = prompt_for_multiple_choices("List the REST resources for this project: ")
+    # components = prompt_for_multiple_choices("List the frontend components for this project: ")
 
+    # items_to_interpolate = { 'resources': resources, 'components': components }
+
+    app_name = "todomvc"
+    frontend_choice = "vue"
+    backend_choice = "flask"
+    resources = ["todo", "user"]
+    components = ["header", "form", "button"]
     items_to_interpolate = { 'resources': resources, 'components': components }
 
     app_builder.build('client', frontend_choice, items_to_interpolate)

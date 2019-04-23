@@ -1,0 +1,7 @@
+from flask import jsonify
+
+from modules.{{regular}} import mod
+
+@mod.route("/{{regular}}", methods=['GET'])
+def get():
+    return jsonify(message="Hello, world! From the {{regular}} module :D")
