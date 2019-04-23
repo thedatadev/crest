@@ -1,2 +1,15 @@
-const regularComponent = "${regular}";
-const capitalComponent = "${capital}";
+import React from 'react';
+
+class ${capital} extends React.Component {
+  render() {
+    return (
+
+      <div className="${regular}">
+
+      </div>
+
+    );
+  }
+}
+
+export default ${capital};

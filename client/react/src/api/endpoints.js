@@ -1,0 +1,1 @@
+export const API_ENDPOINT_URL = "http://12.0.0.1:4040/api/";
