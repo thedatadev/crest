@@ -1,6 +1,7 @@
 from os.path import basename, dirname, exists, abspath, join, realpath, isfile, isdir
 from os import getcwd, scandir, remove
-from string import Template
+# from string import Template
+from jinja2 import Template
 from shutil import copytree, rmtree
 from sys import exit
                                          
@@ -90,6 +91,8 @@ def handle_file(entry, current_path, items_to_interpolate):
         file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
     elif item_suffix == 'components':
         file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_name, current_path)
+    elif item_suffix == 'container':
+        file_contains_resources(entry, items_to_interpolate, file_name, current_path)
     else:
         exit(f"The item suffix '{item_suffix}' is not supported. Crest terminated.")
     # Finally, discard the template file from the repo
@@ -119,6 +122,25 @@ def file_is_based_on_resource(entry, items_to_interpolate, item_suffix, file_nam
                                 new_file_name=abspath(join(current_path, item_file_name)),
                                 item_to_interpolate=item)
 
+def file_contains_resources(entry, items_to_interpolate, file_name, current_path):
+    # If a file is marked with the extension "container",
+    # it contains information about resources or components etc. but its name is unaffected
+    # Example:
+    #   If we have a file that needs to import multiple components because
+    #   it serves as a main entry point such as App.vue or app.py then it needs
+    #   to import all its dependencies such as modules and libraries
+    container_file_path = abspath(join(current_path, file_name))
+    template_file = entry.path
+    with open(template_file, "r") as original_template:
+        with open(container_file_path, "w+") as new_file:
+            incomplete_template = original_template.read()
+            # complete_template = Template(incomplete_template).substitute(resources=items_to_interpolate['resources'],
+            #                                                              components=items_to_interpolate['components'])
+            # new_file.write(complete_template)
+            complete_template = Template(incomplete_template)
+            new_file.write(complete_template.render(resources=items_to_interpolate['resources'],
+                                                    components=items_to_interpolate['components']))
+
 def duplicate_template_folder(current_path, template_folder_path, folder_name, items_to_interpolate, item_suffix):
     # Generates a new folder based on the template folder and the item suffix of the template folder
     # For example, if the item_suffix is "components", then the entry for "components" is looked up
@@ -140,6 +162,9 @@ def duplicate_template_file(template_file, new_file_name, item_to_interpolate):
     with open(template_file, "r") as original_template:
         with open(new_file_name, "w+") as new_file:
             incomplete_template = original_template.read()
-            complete_template = Template(incomplete_template).substitute(regular=item_to_interpolate.lower(),
-                                                                         capital=item_to_interpolate.upper())
-            new_file.write(complete_template)
+            # complete_template = Template(incomplete_template).substitute(regular=item_to_interpolate.lower(),
+            #                                                              capital=item_to_interpolate.upper())
+            # new_file.write(complete_template)
+            complete_template = Template(incomplete_template)
+            new_file.write(complete_template.render(regular=item_to_interpolate.lower(),
+                                                    capital=item_to_interpolate.upper()))
