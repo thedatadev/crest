@@ -1,12 +1,12 @@
 <template>
-  <div class="${regular}">
+  <div class="{{regular}}">
 
   </div>
 </template>
 
 <script>
 export default {
-  name: ${capital},
+  name: {{capital}},
 }
 </script>
 

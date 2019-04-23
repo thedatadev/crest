@@ -1,10 +1,10 @@
 import React from 'react';
 
-class ${capital} extends React.Component {
+class {{capital}} extends React.Component {
   render() {
     return (
 
-      <div className="${regular}">
+      <div className="{{regular}}">
 
       </div>
 
@@ -12,4 +12,4 @@ class ${capital} extends React.Component {
   }
 }
 
-export default ${capital};
+export default {{capital}};

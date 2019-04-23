@@ -1,2 +1,2 @@
-var regularResource := "${regular}";
-var capitalResource := "${capital}";
+var regularResource := "{{regular}}";
+var capitalResource := "{{capital}}";

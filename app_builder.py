@@ -1,6 +1,5 @@
 from os.path import basename, dirname, exists, abspath, join, realpath, isfile, isdir
 from os import getcwd, scandir, remove
-# from string import Template
 from jinja2 import Template
 from shutil import copytree, rmtree
 from sys import exit
@@ -136,9 +135,6 @@ def file_is_item_container(entry, items_to_interpolate, file_name, current_path)
     with open(template_file, "r") as original_template:
         with open(container_file_path, "w+") as new_file:
             incomplete_template = original_template.read()
-            # complete_template = Template(incomplete_template).substitute(resources=items_to_interpolate['resources'],
-            #                                                              components=items_to_interpolate['components'])
-            # new_file.write(complete_template)
             complete_template = Template(incomplete_template)
             new_file.write(complete_template.render(resources=items_to_interpolate['resources'],
                                                     components=items_to_interpolate['components']))
@@ -171,9 +167,6 @@ def duplicate_template_file(template_file, new_file_name, item_to_interpolate):
     with open(template_file, "r") as original_template:
         with open(new_file_name, "w+") as new_file:
             incomplete_template = original_template.read()
-            # complete_template = Template(incomplete_template).substitute(regular=item_to_interpolate.lower(),
-            #                                                              capital=item_to_interpolate.upper())
-            # new_file.write(complete_template)
             complete_template = Template(incomplete_template)
             new_file.write(complete_template.render(regular=item_to_interpolate.lower(),
-                                                    capital=item_to_interpolate.upper()))
+                                                    capital=item_to_interpolate.capitalize()))

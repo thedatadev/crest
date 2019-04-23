@@ -2,24 +2,24 @@ import ApiService from "./http-service";
 
 export default {
     get(slug='') {
-        return ApiService.get("${regular}", slug);
+        return ApiService.get("{{regular}}", slug);
     },
     getAll() {
-        return ApiService.getAll("${regular}");
+        return ApiService.getAll("{{regular}}");
     },
     query(params={}) {
-        return ApiService.query("${regular}", params);
+        return ApiService.query("{{regular}}", params);
     },
     post(params={}) {
-        return ApiService.post("${regular}", params);
+        return ApiService.post("{{regular}}", params);
     },
     put(slug='', params={}) {
-        return ApiService.put("${regular}", slug, params);
+        return ApiService.put("{{regular}}", slug, params);
     },
     update(params={}) {
-        return ApiService.update("${regular}", params);
+        return ApiService.update("{{regular}}", params);
     },
     delete(params={}) {
-        return ApiService.delete("${regular}", params);
+        return ApiService.delete("{{regular}}", params);
     }
 }
