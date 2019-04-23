@@ -37,8 +37,8 @@ if __name__ == "__main__":
     # items_to_interpolate = { 'resources': resources, 'components': components }
 
     app_name = "todomvc"
-    frontend_choice = "vue"
-    backend_choice = "flask"
+    frontend_choice = "react"
+    backend_choice = "go"
     resources = ["todo", "user"]
     components = ["header", "form", "button"]
     items_to_interpolate = { 'resources': resources, 'components': components }
